@@ -21,10 +21,10 @@ tf.executing_eagerly()
 print(tf.__version__)
 
 machine_type = platform.uname()[0]
-if machine_type == 'Linux':
-    path_sep = '/'
-else:
+if machine_type == 'Windows':
     path_sep = '\win'
+else:
+    path_sep = '/'
 path_sep= path_sep[0]
 MAIN_dir = os.getcwd() + path_sep
 checkpoint_path = MAIN_dir +'checkpoint'+path_sep
@@ -34,6 +34,17 @@ input_path = MAIN_dir + 'images'+path_sep + 'input' + path_sep
 output_path = MAIN_dir + 'images'+path_sep + 'output' + path_sep
 
 
+
+def open_file(path):
+    if machine_type == "Windows":
+        os.startfile(path)
+    elif machine_type == "Darwin":
+        subprocess.Popen(["open", path])
+    else:
+        subprocess.Popen(["xdg-open", path])
+        
+        
+        
 def visualize_mod(img, cam, filename):
     fig, ax = plt.subplots(nrows=1, ncols=3)
 
@@ -126,8 +137,9 @@ def cam_vis(in_img_name, out_img_name):
 
     visualize_mod(img2, cam, out_path)
     print(colored('successfully generated a cam', 'blue'))
-
-    if machine_type == 'Linux':
-        subprocess.Popen(['xdg-open', output_path])
-    elif machine_type == 'Windows':
-        os.startfile(output_path)
+    
+    open_file(output_path)
+#     if machine_type == 'Linux':
+#         subprocess.Popen(['xdg-open', output_path])
+#     elif machine_type == 'Windows':
+#         os.startfile(output_path)
